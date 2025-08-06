@@ -2,13 +2,12 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'roboto', sans-serif;
+    font-family: 'Roboto', sans-serif;
     outline: none;
 }
 
 body {
     background-color: #8A51FC;
-    margin: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -16,29 +15,23 @@ body {
 
 .logo-maos {
     width: 300px;
-    display: block;
-    margin: 30px;
-    margin-top: 20px;
+    margin: 20px 30px 30px;
 }
 
 main {
     width: 327px;
     border-radius: 20px;
-    border-width: 1px;
     background-color: aliceblue;
-    margin: 0 auto 40px;
     padding: 44px 24px 23px;
-
+    margin-bottom: 40px;
 }
 
 label {
     color: black;
     font-weight: 400;
     font-size: 14px;
-    border-radius: 5px;
-    padding: 30px 30px;
-    margin-top: 50px;
-
+    display: block;
+    margin-top: 30px;
 }
 
 select,
@@ -48,14 +41,20 @@ input {
     border-radius: 40px;
     height: 48px;
     width: 100%;
-    margin-bottom: 24px;
-    appearance: none;
+    margin: 8px 0 24px;
     padding-left: 18px;
     font-weight: 700;
     font-size: 16px;
     color: black;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
 
-
+select:focus,
+input:focus {
+    border-color: #4A90E2;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.4);
 }
 
 button {
@@ -67,13 +66,11 @@ button {
     color: #ffffff;
     cursor: pointer;
     margin-top: 40px;
-box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
-
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
 }
 
 button:hover {
     opacity: 0.8;
-
 }
 
 button:active {
@@ -89,19 +86,16 @@ section {
     display: flex;
     flex-direction: column;
     align-items: center;
-
 }
 
 .currency-imagem,
 .currency-img {
     width: 60px;
-    height: auto;
 }
 
 .arrow {
     margin: 15px 0;
 }
-
 
 .currency-box {
     display: flex;
@@ -109,15 +103,11 @@ section {
     align-items: center;
     gap: 4px;
     margin: 20px;
-
-
 }
-
 
 .currency {
     color: #313131;
     font-size: 14px;
-
 }
 
 .currency-value,
@@ -125,4 +115,25 @@ section {
     color: #555555;
     font-weight: 700;
     font-size: 20px;
+}
+
+/* Responsividade */
+@media (max-width: 400px) {
+    main {
+        width: 90%;
+        padding: 24px;
+    }
+
+    .logo-maos {
+        width: 200px;
+    }
+
+    .currency-value,
+    .currency-value-to-convert {
+        font-size: 18px;
+    }
+
+    button {
+        font-size: 14px;
+    }
 }
