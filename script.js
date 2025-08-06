@@ -2,15 +2,10 @@ const convertButton = document.querySelector(".convert-button");
 const currencySelect = document.querySelector(".currency-select"); // "converter para"
 const fromCurrency = document.getElementById("from-currency");     // "converter de"
 
-const currencyValueToConvert = document.querySelector(".currency-value-to-convert"); // valor da moeda de origem
-const currencyValueConverted = document.querySelector(".currency-value"); // valor da moeda convertida
-
-// Taxas baseadas no real
-const dolarToday = 5.5;
+const dolarToday = 5.5; // 1 dólar = 5.5 reais
 const euroToday = 6.2;
 const libraToday = 7.5;
 
-// Função para obter taxa de câmbio
 function getRate(currency) {
     switch (currency) {
         case "real": return 1;
@@ -21,7 +16,6 @@ function getRate(currency) {
     }
 }
 
-// Função principal de conversão
 function convertValues() {
     const input = document.querySelector(".input-Currency");
     const inputCurrencyValue = parseFloat(input.value.replace(",", "."));
@@ -31,99 +25,128 @@ function convertValues() {
         return;
     }
 
+    // Moeda de origem e destino selecionadas
     const fromValue = fromCurrency.value;
     const toValue = currencySelect.value;
 
+    // Elementos onde exibiremos os valores formatados
+    const currencyValueToConvert = document.querySelector(".currency-value-to-convert");
+    const currencyValueConverted = document.querySelector(".currency-value");
+
+    // Configurar moeda e locale para a moeda de origem
+    let fromCurrencyCode = "BRL";
+    let fromLocale = "pt-BR";
+
+    switch (fromValue) {
+        case "real":
+            fromCurrencyCode = "BRL";
+            fromLocale = "pt-BR";
+            break;
+        case "dolar":
+            fromCurrencyCode = "USD";
+            fromLocale = "en-US";
+            break;
+        case "euro":
+            fromCurrencyCode = "EUR";
+            fromLocale = "de-DE";
+            break;
+        case "libra":
+            fromCurrencyCode = "GBP";
+            fromLocale = "en-GB";
+            break;
+    }
+
+    // Mostrar valor de origem formatado
+    currencyValueToConvert.innerHTML = new Intl.NumberFormat(fromLocale, {
+        style: "currency",
+        currency: fromCurrencyCode
+    }).format(inputCurrencyValue);
+
+    // Obter taxas de câmbio (valor em real por unidade da moeda)
     const fromRate = getRate(fromValue);
     const toRate = getRate(toValue);
 
-    const valueInReal = inputCurrencyValue * fromRate;
-    const convertedValue = valueInReal / toRate;
+    // Converter valor para real e depois para moeda destino
+    const valueInReais = inputCurrencyValue * fromRate;
+    const convertedValue = valueInReais / toRate;
 
-    // Exibir valor convertido da moeda de origem (sempre em reais)
-    currencyValueToConvert.innerHTML = new Intl.NumberFormat("pt-BR", {
-        style: "currency",
-        currency: "BRL"
-    }).format(valueInReal);
+    // Configurar moeda e locale para a moeda destino
+    let toCurrencyCode = "USD";
+    let toLocale = "en-US";
 
-    // Exibir valor convertido final com moeda correta
     switch (toValue) {
         case "dolar":
-            currencyValueConverted.innerHTML = new Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: "USD"
-            }).format(convertedValue);
+            toCurrencyCode = "USD";
+            toLocale = "en-US";
             break;
-
         case "euro":
-            currencyValueConverted.innerHTML = new Intl.NumberFormat("de-DE", {
-                style: "currency",
-                currency: "EUR"
-            }).format(convertedValue);
+            toCurrencyCode = "EUR";
+            toLocale = "de-DE";
             break;
-
         case "libra":
-            currencyValueConverted.innerHTML = new Intl.NumberFormat("en-GB", {
-                style: "currency",
-                currency: "GBP"
-            }).format(convertedValue);
-            break;
-
-        case "real":
-            currencyValueConverted.innerHTML = new Intl.NumberFormat("pt-BR", {
-                style: "currency",
-                currency: "BRL"
-            }).format(convertedValue);
+            toCurrencyCode = "GBP";
+            toLocale = "en-GB";
             break;
     }
-    const fromCurrencyName = document.getElementById("from-currency-name");
 
-switch (fromValue) {
-    case "real":
-        fromCurrencyName.innerHTML = "Real Brasileiro";
-        break;
-    case "dolar":
-        fromCurrencyName.innerHTML = "Dólar Americano";
-        break;
-    case "euro":
-        fromCurrencyName.innerHTML = "Euro";
-        break;
-    case "libra":
-        fromCurrencyName.innerHTML = "Libra";
-        break;
+    // Mostrar valor convertido formatado
+    currencyValueConverted.innerHTML = new Intl.NumberFormat(toLocale, {
+        style: "currency",
+        currency: toCurrencyCode
+    }).format(convertedValue);
 }
 
-}
-
-// Atualiza nome e imagem da moeda de destino
 function changeCurrency() {
     const currencyName = document.getElementById("currency-name");
     const currencyImage = document.querySelector(".currency-img");
 
-    if (currencySelect.value === "dolar") {
-        currencyName.innerHTML = "Dólar Americano";
-        currencyImage.src = "./assets/usaflag.png";
+    // Atualiza o nome e imagem da moeda destino
+    switch (currencySelect.value) {
+        case "dolar":
+            currencyName.innerHTML = "Dólar Americano";
+            currencyImage.src = "./assets/usaflag.png";
+            break;
+        case "euro":
+            currencyName.innerHTML = "Euro";
+            currencyImage.src = "./assets/euro.png";
+            break;
+        case "libra":
+            currencyName.innerHTML = "Libra";
+            currencyImage.src = "./assets/libra.png";
+            break;
     }
 
-    if (currencySelect.value === "euro") {
-        currencyName.innerHTML = "Euro";
-        currencyImage.src = "./assets/euro.png";
-    }
-
-    if (currencySelect.value === "libra") {
-        currencyName.innerHTML = "Libra";
-        currencyImage.src = "./assets/libra.png";
-    }
-
-    if (currencySelect.value === "real") {
-        currencyName.innerHTML = "Real Brasileiro";
-        currencyImage.src = "./assets/brasilflag.png";
-    }
-
-    convertValues(); // Faz a conversão ao mudar a moeda
+    convertValues();
 }
 
-// Eventos
+// Atualiza imagem e nome moeda origem ao mudar seleção
+function changeFromCurrency() {
+    const currencyNameFrom = document.querySelector(".currency"); // o texto "real", no primeiro box
+    const currencyImageFrom = document.querySelector(".currency-imagem");
+
+    switch (fromCurrency.value) {
+        case "real":
+            currencyNameFrom.innerHTML = "Real Brasileiro";
+            currencyImageFrom.src = "./assets/brasilflag.png";
+            break;
+        case "dolar":
+            currencyNameFrom.innerHTML = "Dólar Americano";
+            currencyImageFrom.src = "./assets/usaflag.png";
+            break;
+        case "euro":
+            currencyNameFrom.innerHTML = "Euro";
+            currencyImageFrom.src = "./assets/euro.png";
+            break;
+        case "libra":
+            currencyNameFrom.innerHTML = "Libra";
+            currencyImageFrom.src = "./assets/libra.png";
+            break;
+    }
+
+    convertValues();
+}
+
+// Eventos para atualização
 currencySelect.addEventListener("change", changeCurrency);
-fromCurrency.addEventListener("change", convertValues);
+fromCurrency.addEventListener("change", changeFromCurrency);
 convertButton.addEventListener("click", convertValues);
